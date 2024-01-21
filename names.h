@@ -1,0 +1,1 @@
+const char* CLASSES[] = {"a","e","ee","i","o","silence","u"};
