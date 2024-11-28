@@ -24,7 +24,7 @@ double vImag[samples];
 #define SCL_TIME 0x01
 #define SCL_FREQUENCY 0x02
 #define SCL_PLOT 0x03
-arduinoFFT FFT;
+ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, samples, samplingFrequency);
 
 void setup() {
   Serial.begin(9600);
@@ -87,13 +87,12 @@ void loop() {
         vImag[i] = 0.0;  //Imaginary part must be zeroed in case of looping to avoid wrong calculations and overflows
       }
 
-      FFT = arduinoFFT(vReal, vImag, samples, samplingFrequency); /* Create FFT object */
-      FFT.Windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);            /* Weigh data */
-      FFT.Compute(FFT_FORWARD);                                   /* Compute FFT */
-      FFT.ComplexToMagnitude();                                   /* Compute magnitudes */
+      FFT.windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);            /* Weigh data */
+      FFT.compute(FFT_FORWARD);                                   /* Compute FFT */
+      FFT.complexToMagnitude();                                   /* Compute magnitudes */
       //Serial.println("Computed magnitudes:");
       //PrintVector(vReal, (samples >> 1), SCL_FREQUENCY);
-      double x = FFT.MajorPeak();
+      double x = FFT.majorPeak();
       //Serial.print(x, 6);
       //Serial.print(" ,  ");
       for (uint16_t i = 0; i < samples; i++) {
