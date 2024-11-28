@@ -34,7 +34,7 @@ double vImag[samples];
 #define SCL_TIME 0x01
 #define SCL_FREQUENCY 0x02
 #define SCL_PLOT 0x03
-arduinoFFT FFT;
+ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, samples, samplingFrequency);
 
 // global variables used for TensorFlow Lite (Micro)
 tflite::MicroErrorReporter tflErrorReporter;
@@ -125,11 +125,11 @@ void loop() {
         vImag[i] = 0.0;  //Imaginary part must be zeroed in case of looping to avoid wrong calculations and overflows
       }
 
-      FFT = arduinoFFT(vReal, vImag, samples, samplingFrequency); /* Create FFT object */
-      FFT.Windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);            /* Weigh data */
-      FFT.Compute(FFT_FORWARD);                                   /* Compute FFT */
-      FFT.ComplexToMagnitude();                                   /* Compute magnitudes */
-      double x = FFT.MajorPeak();
+      //FFT = arduinoFFT(vReal, vImag, samples, samplingFrequency); /* Create FFT object */
+      FFT.windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);            /* Weigh data */
+      FFT.compute(FFT_FORWARD);                                   /* Compute FFT */
+      FFT.complexToMagnitude();                                   /* Compute magnitudes */
+      double x = FFT.majorPeak();
       //Serial.print(x, 6);
 
       // input sensor data to model
